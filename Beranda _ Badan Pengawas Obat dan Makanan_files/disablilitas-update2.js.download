@@ -1,0 +1,137 @@
+$('#disabilitasToggle').click(function(){
+    $('#disableBar').toggleClass('active shadow');
+    $(this).toggleClass('active');
+  });
+  
+  var fontSizeOriginal = parseInt($("body").css("font-size"));
+  var fontSizeOriginalh1 = parseInt($("h1").css("font-size"));
+  var fontSizeOriginalh2 = parseInt($("h2").css("font-size"));
+  var fontSizeOriginalh2l = parseInt($(".layananIcon a h2").css("font-size"));
+  var fontSizeOriginalh2p = parseInt($("#mostViewed .card h2, #pengumuman h2").css("font-size"));
+  var fontSizeOriginalh3 = parseInt($("h3").css("font-size"));
+  var fontSizeOriginalh4 = parseInt($("h4").css("font-size"));
+  var fontSizeOriginalh5 = parseInt($("h5").css("font-size"));
+  var fontSizeOriginalh6 = parseInt($("h6").css("font-size"));
+  var fontSizeOriginalbtn = parseInt($(".btn").css("font-size"));
+  
+  $('#greyScale').click(function(){
+    $('body').toggleClass('greyscale');
+  });
+  
+  $('#invertAcc').click(function(){
+    $('body').toggleClass('invert');
+  });
+  
+  $('#colorAcc').click(function(){
+    $('body').toggleClass('coloracc');
+  });
+  
+  $('#brightnessAcc').click(function(){
+    $('body').toggleClass('brightnessacc');
+  });
+  
+  $('#garisLink').click(function(){
+    $('body').toggleClass('garisLink');
+  });
+  
+  $('#tegasText').click(function(){
+    $('body').toggleClass('tegasText');
+  });
+
+  function getSize() {
+    size = $( "h1,h2,h3,h4,h5,h6,.btn" ).css( "font-size" );
+    size = parseInt(size, 10);
+  }
+
+  getSize();
+  
+  $('#zoomIn').click(function(){
+    var fontSize = parseInt($("body").css("font-size"));
+    fontSize = fontSize + 1 + "px";
+    $("body").css({'font-size':fontSize});
+    $( "h1,h2,h3,h4,h5,h6,.btn" ).css( "font-size", "+=0.4" );
+  });
+  
+  $('#zoomOut').click(function(){
+    var fontSize = parseInt($("body").css("font-size"));
+    fontSize = fontSize - 1 + "px";
+    $("body").css({'font-size':fontSize});
+    $( "h1,h2,h3,h4,h5,h6,.btn" ).css( "font-size", "-=0.4" );
+  });
+  
+  let screenReaderMode = false; // track toggle state
+
+// default language
+const defaultLang = "id-ID";
+
+function speak(text) {
+  if (!text) return;
+  window.speechSynthesis.cancel(); // stop current speech
+
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang = defaultLang;
+
+  // Optional: pick Indonesian Female if available
+  const voices = window.speechSynthesis.getVoices();
+  const indoFemale = voices.find(
+    v => v.lang === "id-ID" && v.name.toLowerCase().includes("female")
+  );
+  if (indoFemale) {
+    msg.voice = indoFemale;
+  }
+
+  window.speechSynthesis.speak(msg);
+}
+
+// get highlighted text
+function getSelectionText() {
+  let text = "";
+  if (window.getSelection) {
+    text = window.getSelection().toString();
+  } else if (document.selection && document.selection.type !== "Control") {
+    text = document.selection.createRange().text;
+  }
+  return text;
+}
+
+// toggle mode on button click
+$('#modeSuara').click(function () {
+  screenReaderMode = !screenReaderMode;
+
+  if (screenReaderMode) {
+    speak("Mode suara diaktifkan, silahkan pilih teks atau highlight teks pada halaman website untuk mendengarkan suaranya.");
+  } else {
+    window.speechSynthesis.cancel();
+    alert("Mode suara dimatikan");
+  }
+});
+
+// listen for text selection globally
+document.addEventListener("mouseup", () => {
+  if (!screenReaderMode) return; // only active when mode is on
+  setTimeout(() => {
+    const selected = getSelectionText();
+    speak(selected);
+  }, 1);
+});
+  
+  $('#resetAcc').click(function(){
+    $('body').removeClass('greyscale');
+    $('body').removeClass('invert');
+    $('body').removeClass('coloracc');
+    $('body').removeClass('brightnessacc');
+    $('body').removeClass('garisLink');
+    $('body').removeClass('tegasText');
+    $("body").css({'font-size':fontSizeOriginal});
+    $("h1").css({'font-size':fontSizeOriginalh1});
+    $("h2").css({'font-size':fontSizeOriginalh2});
+    $(".layananIcon a h2").css({'font-size':fontSizeOriginalh2l});
+    $("#mostViewed .card h2, #pengumuman h2").css({'font-size':fontSizeOriginalh2p});
+    $("h3").css({'font-size':fontSizeOriginalh3});
+    $("h4").css({'font-size':fontSizeOriginalh4});
+    $("h5").css({'font-size':fontSizeOriginalh5});
+    $("h6").css({'font-size':fontSizeOriginalh6});
+    $(".btn").css({'font-size':fontSizeOriginalbtn});
+    responsiveVoice.pause();
+    responsiveVoice.cancel();
+  });
